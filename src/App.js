@@ -1,3 +1,5 @@
+import userEvent from "@testing-library/user-event";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import SingleInput from "./componrnt/SingleInput";
@@ -5,32 +7,41 @@ import SingleInput from "./componrnt/SingleInput";
 
 function App() {
   const { register, handleSubmit, reset } = useForm();
-  const [boxes, setBoxes] = useState(0);
-  const inputField = [];
-  const [isSubscribed, setIsSubscribed] = useState(false);
-
+  const [checked, setChecked] = useState(false);
+  let boxes = 0;
+  let inputField = [];
+  const [items, setItems] = useState([]);
 
   const onSubmit = (data) => {
-    setBoxes(data.boxAmount);
+    boxes = data.boxAmount;
+    if (boxes > 0) {
+      for (let index = 1; index <= boxes; index++) {
+        inputField.push({ 'item': index, 'id': index, 'isChecked': checked });
+      }
+      setItems(inputField);
+    }
     reset();
   };
+  // console.log(items)
 
-  if (boxes > 0) {
-    for (let index = 1; index <= boxes; index++) {
-      inputField.push('item' + index)
+  const handleAllchecked = event => {
+    if (event.target.checked) {
+      setChecked(true)
+      items?.map(item => item.isChecked = checked);
+    } else {
+      setChecked(false)
+      items?.map(item => item.isChecked = checked);
     }
   };
-  console.log(inputField);
-
 
   const handleChange = event => {
-    if (event.target.checked) {
-      console.log('✅ Checkbox is checked');
-    } else {
-      console.log('⛔️ Checkbox is NOT checked');
-    }
-    setIsSubscribed(current => !current);
+    let isChecked = event.target.checked;
+    // let checkListValue = event.target.closest('div')
+    // let v = checkListValue.find('.num-input')
+
+    setChecked(!checked);
   };
+
   return (
     <div className="flex flex-col items-center bg-zinc-100  mx-auto h-screen">
       <h1 className="text-4xl text-gray-800 font-sans font-semibold my-4">Items Counter</h1>
@@ -57,13 +68,12 @@ function App() {
             </button>
           </form>
         </div>
-        {inputField.length > 0 && <div className="flex items-center mt-12">
+        {items.length > 0 && <div className="flex items-center mt-12">
           <label htmlFor="allChecked">
             <input
               className="accent-violet-500  w-4 h-4"
               type="checkbox"
-              value={isSubscribed}
-              onChange={handleChange}
+              onChange={handleAllchecked}
               name="allChecked"
             />
           </label>
@@ -71,7 +81,12 @@ function App() {
         </div>}
         <div className="flex flex-col items-start mt-2">
           {
-            inputField.map((item, index) => <SingleInput key={index} item={item} />)
+            items?.map((item, index) => <SingleInput
+              key={index}
+              item={item}
+              checked={checked}
+              handleChange={handleChange}
+            />)
           }
         </div>
       </div>

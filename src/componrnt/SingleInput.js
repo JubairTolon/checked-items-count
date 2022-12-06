@@ -1,36 +1,30 @@
 import React, { useState } from 'react';
 
-const SingleInput = () => {
-    const [isSubscribed, setIsSubscribed] = useState(false);
-    const sum = 0;
+const SingleInput = ({ item, handleChange, checked }) => {
+    const [i, setI] = useState('')
 
-    const handleChange = event => {
-        let value = event.target.value
-        if (event.target.checked) {
-            console.log('value:', value)
-        } else {
-            console.log('⛔️ Checkbox is NOT checked');
-        }
-        setIsSubscribed(current => !current);
-    };
+    const handleInput = event => {
+        setI(event.target.value)
+    }
+
     return (
-        <div className='mb-2 w-full'>
-            <label htmlFor="singleItemChecked">
+        <div className='flex items-center mb-2 w-full input-field'>
+            <label className='flex items-center' htmlFor="singleItemChecked">
                 <input
-                    className="accent-violet-500 mr-3 w-4 h-4"
+                    className="accent-violet-500 mr-3 w-4 h-4 check-input"
                     type="checkbox"
-                    value={isSubscribed}
-                    onChange={handleChange}
                     name="singleItemChecked"
-                />
+                    checked={checked}
+                    onChange={handleChange}
+                />Item: {item.id}
             </label>
             <input
-                onChange={handleChange}
+                className='num-input border-2 border-gray-300 rounded-md h-8 px-2 text-center font-semibold ml-1 text-gray-700 focus:outline-none'
+                onChange={handleInput}
                 type="number"
                 min='1'
-                // value={deadline}
-                // name="deadline"
-                className='border-2 border-gray-300 rounded-md h-8 px-2 text-center font-semibold text-gray-700 focus:outline-none ' />
+                value={i}
+            />
         </div>
     );
 };
