@@ -1,6 +1,6 @@
 # Color-fill-app
 
-Live site: [Color-fill](https://github.com/facebook/create-react-app).
+Live site: [item-check-count](https://kaleidoscopic-pegasus-99c091.netlify.app/).
 
 ## Technologies
 * React
